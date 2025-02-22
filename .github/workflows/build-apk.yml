@@ -3,33 +3,32 @@ name: Build Android APK
 on:
   push:
     branches:
-      - main # این workflow زمانی اجرا می‌شود که به branch main commit شود
+      - main
+
+permissions:
+  contents: read
 
 jobs:
   build-apk:
-    runs-on: ubuntu-latest # اجرای workflow روی سیستم عامل Linux
+    runs-on: ubuntu-latest
 
     steps:
-      # گام 1: کد منبع را clone کنید
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # گام 2: JDK را نصب کنید
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'zulu'
 
-      # گام 3: Android SDK را نصب کنید
       - name: Install Android SDK
         uses: android-actions/setup-android@v2
         with:
           tools: latest
-          build-tools: 33.0.2
-          platform: android-33
+          build-tools: 34.0.0
+          platform: android-34
 
-      # گام 4: Gradle dependencies را cache کنید
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -38,13 +37,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # گام 5: ساخت APK
       - name: Build APK
         run: ./gradlew assembleRelease
 
-      # گام 6: Upload APK
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          path: app/build/outputs/apk/release/*.apk
