@@ -13,40 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # گام 1: دریافت کد منبع
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # گام 2: نصب JDK 11
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'zulu'
 
-      - name: Install required system packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-
+      # گام 3: تنظیم Android SDK با اکشن رسمی گوگل
       - name: Setup Android SDK
-        env:
-          ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
-        run: |
-          # دانلود و نصب command-line-tools
-          SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip"
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          wget -q $SDK_TOOLS_URL -O tools.zip
-          unzip -q tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools
-          rm tools.zip
-          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+        uses: android-actions/setup-android-sdk@v2
+        with:
+          components: "platforms;android-34,build-tools;34.0.0"
 
-          # افزودن SDK به PATH
-          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
-
-          # پذیرش لایسنس و نصب کامپوننت‌ها
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0"
-
+      # گام 4: کش کردن وابستگی‌های Gradle
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -55,9 +39,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # گام 5: ساخت APK
       - name: Build APK
         run: ./gradlew assembleRelease
 
+      # گام 6: آپلود APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
