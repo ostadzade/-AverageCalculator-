@@ -26,9 +26,12 @@ jobs:
 
       # گام 3: تنظیم Android SDK با اکشن رسمی گوگل
       - name: Setup Android SDK
-        uses: android-actions/setup-android-sdk@v2
+        uses: android-actions/setup-android@v2
         with:
-          components: "platforms;android-34,build-tools;34.0.0"
+          sdk-root: ${{ github.workspace }}/android-sdk
+          components: |
+            platforms;android-34
+            build-tools;34.0.0
 
       # گام 4: کش کردن وابستگی‌های Gradle
       - name: Cache Gradle dependencies
