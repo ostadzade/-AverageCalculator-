@@ -1,18 +1,30 @@
+<<<<<<< HEAD
 name: Build Android APK
+=======
+name: Build APK
+>>>>>>> 72cea5bc8ccec87193e21c8b97fd60248280210b
 
 on:
   push:
     branches:
+<<<<<<< HEAD
       - main
 
 jobs:
   build-apk:
+=======
+      - main  # یا هر شاخه‌ای که می‌خواهید Workflow روی آن اجرا شود
+
+jobs:
+  build:
+>>>>>>> 72cea5bc8ccec87193e21c8b97fd60248280210b
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+<<<<<<< HEAD
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
@@ -42,3 +54,13 @@ jobs:
         with:
           name: apk
           path: app/build/outputs/apk/release/app-release-unsigned.apk
+=======
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Build APK
+        run: ./gradlew assembleDebug
+>>>>>>> 72cea5bc8ccec87193e21c8b97fd60248280210b
