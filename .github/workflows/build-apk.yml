@@ -3,32 +3,21 @@ name: Build Android APK
 on:
   push:
     branches:
-<<<<<<< HEAD
-      - main
-=======
       - main # این workflow زمانی اجرا می‌شود که به branch main commit شود
->>>>>>> 1995f56695d123acaa8d32a6fcaa4b9725ad09cb
 
 permissions:
   contents: read
 
 jobs:
   build-apk:
-<<<<<<< HEAD
-    runs-on: ubuntu-latest
-=======
     runs-on: ubuntu-latest # اجرای workflow روی سیستم عامل Linux
->>>>>>> 1995f56695d123acaa8d32a6fcaa4b9725ad09cb
 
     steps:
       # گام 1: کد منبع را clone کنید
       - name: Checkout code
         uses: actions/checkout@v4
 
-<<<<<<< HEAD
-=======
       # گام 2: JDK را نصب کنید
->>>>>>> 1995f56695d123acaa8d32a6fcaa4b9725ad09cb
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
@@ -61,8 +50,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: apk
-<<<<<<< HEAD
           path: app/build/outputs/apk/release/*.apk
-=======
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
->>>>>>> 1995f56695d123acaa8d32a6fcaa4b9725ad09cb
