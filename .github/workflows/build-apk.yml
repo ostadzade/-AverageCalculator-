@@ -1,0 +1,23 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - main  # یا هر شاخه‌ای که می‌خواهید Workflow روی آن اجرا شود
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Build APK
+        run: ./gradlew assembleDebug
